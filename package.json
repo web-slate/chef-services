@@ -1,0 +1,38 @@
+{
+  "name": "@fe-chef/services",
+  "version": "0.1.0",
+  "description": "Create API Code in Lightening Speed",
+  "main": "index.js",
+  "engine": {
+    "node": "10",
+    "npm": "5"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "create": "node generator.js -f sample1.json"
+  },
+  "bin": {
+    "fe-chef-services": "./generator.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/web-slate/chef-services.git"
+  },
+  "keywords": [],
+  "author": "Venkatraman.R",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/web-slate/chef-services/issues"
+  },
+  "homepage": "https://github.com/web-slate/chef-services#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "commander": "^9.1.0",
+    "event-stream": "^4.0.1",
+    "inquirer": "^8.2.1",
+    "sanitize-filename": "^1.6.3",
+    "shelljs": "^0.8.5"
+  }
+}
