@@ -1,6 +1,5 @@
 #! /usr/bin/env node
 const program = require('commander')
-const fs = require('fs')
 const path = require('path')
 
 const { error } = require('./utils/message')
@@ -19,6 +18,7 @@ const firstParam = program.args[0]
 const { postmanFile, location = 'hooks' } = program.opts()
 const generateLocation = location.split('/')
 
+const FILE_EXTENSION = 'js'
 const DEFINITION_FILE = firstParam || postmanFile
 
 if (!DEFINITION_FILE) {
@@ -30,9 +30,21 @@ const postmanCollectionJson = require(path.resolve(__dirname, DEFINITION_FILE))
 const { item: collections = [] } = postmanCollectionJson || {}
 
 if (Array.isArray(collections)) {
-  collections.forEach(item => {
+  collections.forEach(collectionItem => {
+    const directoryName = sanitizeName(collectionItem?.name)
     createDirectory(
-      path.resolve(__dirname, location, sanitizeName(item?.name))
+      path.resolve(__dirname, location, directoryName)
     )
+
+    if (Array.isArray(collectionItem?.item)) {
+      collectionItem.item.forEach(apiItem => {
+        const customHookName = `use${sanitizeName(apiItem?.name, { pascalCase: true })}`
+        const customHookFile = `${customHookName}.${FILE_EXTENSION}`
+        createFile({
+          pathToFile: path.resolve(__dirname, location, directoryName, customHookFile),
+          data: `export { default } from './${customHookName}'`
+        })
+      })
+    }
   })
 }
