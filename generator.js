@@ -15,7 +15,7 @@ program
   .parse()
 
 const firstParam = program.args[0]
-const { postmanFile, location = 'hooks' } = program.opts()
+const { postmanFile, location = 'hooks/services' } = program.opts()
 const generateLocation = location.split('/')
 
 const FILE_EXTENSION = 'js'
