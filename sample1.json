@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "DigestAuth Request",
+			"name": "Buyer",
 			"item": [
 				{
 					"name": "Get Buyers",
@@ -121,7 +121,7 @@
 			]
 		},
 		{
-			"name": "seller",
+			"name": "Seller",
 			"item": [
 				{
 					"name": "Get Sellers",
