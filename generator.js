@@ -4,6 +4,7 @@ const path = require('path')
 
 const { error } = require('./utils/message')
 const { createDirectory, sanitizeName, createFile } = require('./utils/files')
+const createServiceFile = require('./react')
 const packageJson = require("./package.json");
 
 program
@@ -16,7 +17,6 @@ program
 
 const firstParam = program.args[0]
 const { postmanFile, location = 'hooks/services' } = program.opts()
-const generateLocation = location.split('/')
 
 const FILE_EXTENSION = 'js'
 const DEFINITION_FILE = firstParam || postmanFile
@@ -40,9 +40,18 @@ if (Array.isArray(collections)) {
       collectionItem.item.forEach(apiItem => {
         const customHookName = `use${sanitizeName(apiItem?.name, { pascalCase: true })}`
         const customHookFile = `${customHookName}.${FILE_EXTENSION}`
+        const { method, url } = apiItem?.request
+        if (!method) {
+          return
+        }
+
         createFile({
           pathToFile: path.resolve(__dirname, location, directoryName, customHookFile),
-          data: `export { default } from './${customHookName}'`
+          data: createServiceFile({
+            name: customHookName,
+            method,
+            endpoint: url?.raw || ''
+          })
         })
       })
     }
