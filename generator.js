@@ -3,7 +3,7 @@ const program = require('commander')
 const path = require('path')
 
 const { error } = require('./utils/message')
-const { createDirectory, sanitizeName, createFile } = require('./utils/files')
+const { createDirectory, sanitizeName, sanitizeAndPascalCase, sanitizeAndCamelCase, createFile } = require('./utils/files')
 const createServiceFile = require('./react')
 const packageJson = require("./package.json");
 
@@ -38,9 +38,11 @@ if (Array.isArray(collections)) {
 
     if (Array.isArray(collectionItem?.item)) {
       collectionItem.item.forEach(apiItem => {
-        const customHookName = `use${sanitizeName(apiItem?.name, { pascalCase: true })}`
+        const pascalCasedServiceName = sanitizeAndPascalCase(apiItem?.name)
+        const customHookName = `use${pascalCasedServiceName}`
         const customHookFile = `${customHookName}.${FILE_EXTENSION}`
         const { method, url } = apiItem?.request
+
         if (!method) {
           return
         }
@@ -49,6 +51,11 @@ if (Array.isArray(collections)) {
           pathToFile: path.resolve(__dirname, location, directoryName, customHookFile),
           data: createServiceFile({
             name: customHookName,
+            serviceName: {
+              default: apiItem?.name,
+              camelCased: sanitizeAndCamelCase(apiItem?.name),
+              pascalCased: pascalCasedServiceName
+            },
             method,
             endpoint: url?.raw || ''
           })
