@@ -41,7 +41,7 @@ if (Array.isArray(collections)) {
         const pascalCasedServiceName = sanitizeAndPascalCase(apiItem?.name)
         const customHookName = `use${pascalCasedServiceName}`
         const customHookFile = `${customHookName}.${FILE_EXTENSION}`
-        const { method, url } = apiItem?.request
+        const { method, url, body } = apiItem?.request
 
         if (!method) {
           return
@@ -54,10 +54,11 @@ if (Array.isArray(collections)) {
             serviceName: {
               default: apiItem?.name,
               camelCased: sanitizeAndCamelCase(apiItem?.name),
-              pascalCased: pascalCasedServiceName
+              pascalCased: pascalCasedServiceName,
             },
             method,
-            endpoint: url?.raw || ''
+            endpoint: url?.raw || '',
+            body: body?.raw || '' 
           })
         })
       })
