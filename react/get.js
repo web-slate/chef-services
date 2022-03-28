@@ -16,17 +16,17 @@ export default function ${name}() {
 // Services
 import ${name} from './path/to/${name}'
 
-const { response: ${camelCasedServiceName}Response, error: ${camelCasedServiceName}Error, loading: ${camelCasedServiceName}Loading } = ${name}();
+const { response: ${camelCasedServiceName}Response, error: ${camelCasedServiceName}Error, loading: ${camelCasedServiceName}Loading } = ${name}()
 
 // Inside Component.
 return (
   <pre>
     {${camelCasedServiceName}Loading && 'Get ${camelCasedServiceName} Loading...'}
-    {${camelCasedServiceName}Error && \`Get Buyers Error: \$\{${camelCasedServiceName}Error.message\}\`}
+    {${camelCasedServiceName}Error && \`${serviceName.default} Error: \$\{${camelCasedServiceName}Error.message\}\`}
     {${camelCasedServiceName}Response && JSON.stringify(${camelCasedServiceName}Response)}
   </pre>
 )
 */
-
 `
+
 }
