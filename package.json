@@ -1,6 +1,6 @@
 {
   "name": "@fe-chef/services",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create API Code in Lightening Speed",
   "main": "index.js",
   "engine": {
