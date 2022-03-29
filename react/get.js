@@ -2,10 +2,11 @@ module.exports = function createGetServiceFile ({ name, serviceName, endpoint })
 const camelCasedServiceName = serviceName.camelCased
 
 return `import useFetch from '../../useFetch'
+import { ${endpoint} } from '../path/to/utils/endpoints'
 
 export default function ${name}() {
   const { response, error, loading } = useFetch(
-    '${endpoint}'
+    ${endpoint}
   )
   return { response, error, loading }
 }
