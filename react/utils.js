@@ -1,9 +1,6 @@
 module.exports = function createUtilFile (endpointList = []) {
-  const protocol = endpointList[0].url.protocol
-  const hostName = endpointList[0].url.host.join('.')
-
-  if (protocol && hostName) {
-  }
+  const protocol = endpointList[0]?.url?.protocol || ''
+  const hostName = endpointList[0]?.url?.(host || []).join('.') || ''
 
   let utilContent = `function getBasePath() {
   return '${protocol}:/\/${hostName}'
