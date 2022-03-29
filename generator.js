@@ -75,7 +75,7 @@ try {
           path.resolve(location, directoryName)
         )
 
-        collectionItem.forEach(apiItem => {
+        collectionItem?.item.forEach(apiItem => {
           const { url = {} } = apiItem?.request || {}
           endpointList.push({
             name: getEndpoinName(apiItem),
