@@ -16,11 +16,10 @@ program
   .option('-u, --utilLocation <value>', 'location separated by slashes')
   .parse()
 
-const firstParam = program.args[0]
 const { postmanFile, location = 'hooks/services', utilLocation = 'utils' } = program.opts()
 
 const FILE_EXTENSION = 'js'
-const DEFINITION_FILE = firstParam || postmanFile
+const DEFINITION_FILE = postmanFile
 
 if (!DEFINITION_FILE) {
   error('Please provide a postman exported collection file.')
