@@ -6,6 +6,7 @@ const { error } = require('./utils/message')
 const { createDirectory, sanitizeName, sanitizeAndPascalCase, sanitizeAndCamelCase, createFile } = require('./utils/files')
 const { createServiceFile, createUtilFile } = require('./react')
 const packageJson = require("./package.json");
+const { ADDRGETNETWORKPARAMS } = require('dns')
 
 program
   .name('@chef/services')
@@ -21,62 +22,81 @@ try {
 
   const FILE_EXTENSION = 'js'
   const DEFINITION_FILE = postmanFile
-  
+
   if (!DEFINITION_FILE) {
     error('Please provide a postman exported collection file.')
   }
-  
+
   const postmanCollectionJson = require(path.resolve(DEFINITION_FILE))
-  
+
   const { item: collections = [] } = postmanCollectionJson || {}
   const endpointList = []
-  
+
+  const getEndpoinName = (apiItem) => {
+    return sanitizeName(apiItem?.name, { replaceWith: '_' }).toUpperCase()
+  }
+
+  const createServiceEngine = (apiItem = {}, directoryName) => {
+    const pascalCasedServiceName = sanitizeAndPascalCase(apiItem?.name)
+    const customHookName = `use${pascalCasedServiceName}`
+    const customHookFile = `${customHookName}.${FILE_EXTENSION}`
+    const { method, url = {}, body = {} } = apiItem?.request || {}
+
+    if (!method || !url?.raw) {
+      return
+    }
+
+    createFile({
+      pathToFile: path.resolve(location, directoryName, customHookFile),
+      data: createServiceFile({
+        name: customHookName,
+        serviceName: {
+          default: apiItem?.name,
+          camelCased: sanitizeAndCamelCase(apiItem?.name),
+          pascalCased: pascalCasedServiceName,
+        },
+        method,
+        endpoint: getEndpoinName(apiItem),
+        body: body?.raw || ''
+      })
+    })
+  }
+
   if (Array.isArray(collections)) {
+    createDirectory(
+      path.resolve(location)
+    )
+
+    let directoryName = ''
     collections.forEach(collectionItem => {
-      const directoryName = sanitizeName(collectionItem?.name)
-      createDirectory(
-        path.resolve(location, directoryName)
-      )
-  
       if (Array.isArray(collectionItem?.item)) {
-        collectionItem.item.forEach(apiItem => {
-          const pascalCasedServiceName = sanitizeAndPascalCase(apiItem?.name)
-          const customHookName = `use${pascalCasedServiceName}`
-          const customHookFile = `${customHookName}.${FILE_EXTENSION}`
-          const { method, url = {}, body = {} } = apiItem?.request || {}
-  
-          if (!method || !url?.raw) {
-            return
-          }
-  
-          const endpointName = sanitizeName(apiItem?.name, { replaceWith: '_'}).toUpperCase()
+        directoryName = sanitizeName(collectionItem?.name)
+        createDirectory(
+          path.resolve(location, directoryName)
+        )
+
+        collectionItem.forEach(apiItem => {
+          const { url = {} } = apiItem?.request || {}
           endpointList.push({
-            name: endpointName,
+            name: getEndpoinName(apiItem),
             url
           })
-  
-          createFile({
-            pathToFile: path.resolve(location, directoryName, customHookFile),
-            data: createServiceFile({
-              name: customHookName,
-              serviceName: {
-                default: apiItem?.name,
-                camelCased: sanitizeAndCamelCase(apiItem?.name),
-                pascalCased: pascalCasedServiceName,
-              },
-              method,
-              endpoint: endpointName,
-              body: body?.raw || '' 
-            })
-          })
+          createServiceEngine(apiItem, directoryName)
         })
+      } else {
+        const { url = {} } = collectionItem?.request || {}
+        endpointList.push({
+          name: getEndpoinName(collectionItem),
+          url
+        })
+        createServiceEngine(collectionItem, directoryName)
       }
     })
-  
+
     createDirectory(
       path.resolve(location, utilLocation)
     )
-  
+
     createFile({
       pathToFile: path.resolve(location, utilLocation, `endpoints.${FILE_EXTENSION}`),
       data: createUtilFile(endpointList)

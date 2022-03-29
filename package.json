@@ -11,7 +11,7 @@
     "access": "public"
   },
   "scripts": {
-    "create": "node generator.js --postmanFile=postman-collection.json --location=hooks --utilLocation=utilities"
+    "create": "node generator.js --postmanFile=slack-collection.json --location=hooks --utilLocation=utilities"
   },
   "bin": {
     "fe-chef-services": "./generator.js"
