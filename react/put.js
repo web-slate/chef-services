@@ -2,11 +2,12 @@ module.exports = function createPutServiceFile ({ name, serviceName, endpoint, b
 const camelCasedServiceName = serviceName.camelCased
 
 return `import usePut from '../../usePut'
+import { ${endpoint} } from '../path/to/utils/endpoints'
 
 export default function ${name}(methodName) {
   const { response, error, loading, sendPutData } = usePut(
-    '${endpoint}',
-     methodName
+    ${endpoint},
+    methodName
   )
   return { response, error, loading, [methodName]: sendPutData }
 }
