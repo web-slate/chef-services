@@ -1,11 +1,13 @@
 module.exports = function createPostServiceFile({ name, serviceName, endpoint, body }) {
   const camelCasedServiceName = serviceName.camelCased
-  return `import usePost from '../../usePost'
+
+return `import usePost from '../../usePost'
+import { ${endpoint} } from '../path/to/utils/endpoints'
 
 export default function ${name}(methodName) {
   const { response, error, loading, sendPostData } = usePost(
-    '${endpoint}',
-     methodName
+    ${endpoint},
+    methodName
   )
   return { response, error, loading, [methodName]: sendPostData }
 }
