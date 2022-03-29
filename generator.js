@@ -25,7 +25,7 @@ if (!DEFINITION_FILE) {
   error('Please provide a postman exported collection file.')
 }
 
-const postmanCollectionJson = require(path.resolve(__dirname, DEFINITION_FILE))
+const postmanCollectionJson = require(path.resolve(DEFINITION_FILE))
 
 const { item: collections = [] } = postmanCollectionJson || {}
 const endpointList = []
@@ -34,7 +34,7 @@ if (Array.isArray(collections)) {
   collections.forEach(collectionItem => {
     const directoryName = sanitizeName(collectionItem?.name)
     createDirectory(
-      path.resolve(__dirname, location, directoryName)
+      path.resolve(location, directoryName)
     )
 
     if (Array.isArray(collectionItem?.item)) {
@@ -73,11 +73,11 @@ if (Array.isArray(collections)) {
   })
 
   createDirectory(
-    path.resolve(__dirname, location, utilLocation)
+    path.resolve(location, utilLocation)
   )
 
   createFile({
-    pathToFile: path.resolve(__dirname, location, utilLocation, `endpoints.${FILE_EXTENSION}`),
+    pathToFile: path.resolve(location, utilLocation, `endpoints.${FILE_EXTENSION}`),
     data: createUtilFile(endpointList)
   })
 }
