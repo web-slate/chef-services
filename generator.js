@@ -42,9 +42,9 @@ if (Array.isArray(collections)) {
         const pascalCasedServiceName = sanitizeAndPascalCase(apiItem?.name)
         const customHookName = `use${pascalCasedServiceName}`
         const customHookFile = `${customHookName}.${FILE_EXTENSION}`
-        const { method, url, body } = apiItem?.request
+        const { method, url = {}, body = {} } = apiItem?.request || {}
 
-        if (!method) {
+        if (!method || !url?.raw) {
           return
         }
 
