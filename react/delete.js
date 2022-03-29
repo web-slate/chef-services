@@ -2,6 +2,7 @@ module.exports = function createDeleteServiceFile ({ name, serviceName, endpoint
 const camelCasedServiceName = serviceName.camelCased
 
 return `import useDelete from '../../useDelete'
+// TODO: below import path should be updated.
 import { ${endpoint} } from '../path/to/utils/endpoints'
 
 export default function ${name}(methodName) {
@@ -15,10 +16,10 @@ export default function ${name}(methodName) {
 /***
  * Sample Implementation for above Delete Services Custom Hook.
 
-// Services
+ // TODO: below import path should be updated.
 import ${name} from './path/to/${name}'
 
-// Inside your component.
+// TODO: call this Custom Hook inside your component.
 const {
   response: ${camelCasedServiceName}Response,
   error: ${camelCasedServiceName}Error,
@@ -28,8 +29,10 @@ const {
   'sendDeleteData'
 )
 
+// TODO: Update the payload value.
 const ${camelCasedServiceName}Payload = ${body}
 
+// TODO: paste this below snippet to test this custom hook.
 return (
   <pre>
     <pre>{JSON.stringify(${camelCasedServiceName}Payload)}</pre>
