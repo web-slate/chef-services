@@ -13,10 +13,11 @@ program
   .version(packageJson.version)
   .option('-f, --postmanFile <value>', 'postman collection exported file')
   .option('-l, --location <value>', 'location separated by slashes')
+  .option('-u, --utilLocation <value>', 'location separated by slashes')
   .parse()
 
 const firstParam = program.args[0]
-const { postmanFile, location = 'hooks/services' } = program.opts()
+const { postmanFile, location = 'hooks/services', utilLocation = 'utils' } = program.opts()
 
 const FILE_EXTENSION = 'js'
 const DEFINITION_FILE = firstParam || postmanFile
@@ -73,11 +74,11 @@ if (Array.isArray(collections)) {
   })
 
   createDirectory(
-    path.resolve(__dirname, location, 'utils')
+    path.resolve(__dirname, location, utilLocation)
   )
 
   createFile({
-    pathToFile: path.resolve(__dirname, location, 'utils', `endpoints.${FILE_EXTENSION}`),
+    pathToFile: path.resolve(__dirname, location, utilLocation, `endpoints.${FILE_EXTENSION}`),
     data: createUtilFile(endpointList)
   })
 }

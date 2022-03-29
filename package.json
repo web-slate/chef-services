@@ -11,7 +11,7 @@
     "access": "public"
   },
   "scripts": {
-    "create": "node generator.js -f sample1.json"
+    "create": "node generator.js --postmanFile=postman-collection.json --location=hooks --utilLocation=utilities"
   },
   "bin": {
     "fe-chef-services": "./generator.js"
