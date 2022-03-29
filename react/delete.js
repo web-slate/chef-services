@@ -2,11 +2,12 @@ module.exports = function createDeleteServiceFile ({ name, serviceName, endpoint
 const camelCasedServiceName = serviceName.camelCased
 
 return `import useDelete from '../../useDelete'
+import { ${endpoint} } from '../path/to/utils/endpoints'
 
 export default function ${name}(methodName) {
   const { response, error, loading, sendDeleteData } = useDelete(
     ${endpoint},
-     methodName
+    methodName
   )
   return { response, error, loading, [methodName]: sendDeleteData }
 }
