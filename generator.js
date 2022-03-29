@@ -4,7 +4,7 @@ const path = require('path')
 
 const { error } = require('./utils/message')
 const { createDirectory, sanitizeName, sanitizeAndPascalCase, sanitizeAndCamelCase, createFile } = require('./utils/files')
-const createServiceFile = require('./react')
+const { createServiceFile, createUtilFile } = require('./react')
 const packageJson = require("./package.json");
 
 program
@@ -28,6 +28,7 @@ if (!DEFINITION_FILE) {
 const postmanCollectionJson = require(path.resolve(__dirname, DEFINITION_FILE))
 
 const { item: collections = [] } = postmanCollectionJson || {}
+const endpointList = []
 
 if (Array.isArray(collections)) {
   collections.forEach(collectionItem => {
@@ -47,6 +48,12 @@ if (Array.isArray(collections)) {
           return
         }
 
+        const endpointName = sanitizeName(apiItem?.name, { replaceWith: '_'}).toUpperCase()
+        endpointList.push({
+          name: endpointName,
+          url
+        })
+
         createFile({
           pathToFile: path.resolve(__dirname, location, directoryName, customHookFile),
           data: createServiceFile({
@@ -57,11 +64,20 @@ if (Array.isArray(collections)) {
               pascalCased: pascalCasedServiceName,
             },
             method,
-            endpoint: url?.raw || '',
+            endpoint: endpointName,
             body: body?.raw || '' 
           })
         })
       })
     }
+  })
+
+  createDirectory(
+    path.resolve(__dirname, location, 'utils')
+  )
+
+  createFile({
+    pathToFile: path.resolve(__dirname, location, 'utils', `endpoints.${FILE_EXTENSION}`),
+    data: createUtilFile(endpointList)
   })
 }
