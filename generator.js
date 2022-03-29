@@ -55,7 +55,7 @@ if (Array.isArray(collections)) {
         })
 
         createFile({
-          pathToFile: path.resolve(__dirname, location, directoryName, customHookFile),
+          pathToFile: path.resolve(location, directoryName, customHookFile),
           data: createServiceFile({
             name: customHookName,
             serviceName: {
