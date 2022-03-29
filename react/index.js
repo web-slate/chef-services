@@ -2,8 +2,9 @@ const createGetServiceFile = require('./get')
 const createPostServiceFile = require('./post')
 const createPutServiceFile = require('./put')
 const createDeleteServiceFile = require('./delete')
+const createUtilFile = require('./utils')
 
-module.exports = function createServiceFile (options) {
+function createServiceFile (options) {
   const { name, method } = options
   const creatorMapping = {
     GET: createGetServiceFile,
@@ -18,4 +19,9 @@ module.exports = function createServiceFile (options) {
   }
 
   return `export default function ${name}() { }`
+}
+
+module.exports = {
+  createServiceFile,
+  createUtilFile,
 }
