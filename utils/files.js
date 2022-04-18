@@ -1,6 +1,12 @@
 const shell = require('shelljs')
 const sanitize = require("sanitize-filename")
 
+function removeSpecialCharactersAndSanitize(directoryOrFileName){
+  // Allow letters and numbers, replace other characters with _
+  const string = directoryOrFileName.replace(/[^a-zA-Z0-9]/g,'_')
+  return sanitize(string)
+}
+
 function toPascalCase(input){
   return `${input}`
     .replace(new RegExp(/[-_]+/, 'g'), ' ')
@@ -28,7 +34,7 @@ function createDirectory(pathWithName) {
 
 function sanitizeName(directoryOrFileName, options = {}) {
   const { replaceWith = '-', skipReplaceOnFirstItem = true, pascalCase = false, camelCase = false } = options || {}
-  const sanitized = sanitize(directoryOrFileName)
+  const sanitized = removeSpecialCharactersAndSanitize(directoryOrFileName)
   const lowerCased = sanitized.toLowerCase()
   let validName = ''
 
